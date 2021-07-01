@@ -16,13 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.csrf import csrf_exempt
-from graphene_django.views import GraphQLView
+from django.views.generic.base import RedirectView
 from graphene_django.views import GraphQLView
 
 from .schema import schema
 
 urlpatterns = [
-    path(r'graphql/', csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=True))), #TODO: separar la versión con graphiql y asignar una URL privada
+    path('', RedirectView.as_view(url='graphql/')),
+    path('graphql/', csrf_exempt(GraphQLView.as_view(schema=schema))),
+    path('explore/', csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=True))),
     path('admin/', admin.site.urls),
 ]

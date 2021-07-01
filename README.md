@@ -30,6 +30,9 @@ python manage.py load_fixtures
 ```
 python manage.py runserver
 ```
+If you want to check it out, access the graphi explorer here: `127.0.0.1:8000/explore`.
+
+The service should be available in the URL: `127.0.0.1:8000/graphql`.
 
 ### Runing the tests
 ```

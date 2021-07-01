@@ -4,10 +4,10 @@ from dotenv import load_dotenv
 
 load_dotenv()  # Load env variables
 
-SECRET_KEY = os.getenv('SECRET_KEY', 'Please generate a private key')  # TODO: Generar un key seguro
+SECRET_KEY = os.getenv('SECRET_KEY', 'Please-generate-a-private key')  # TODO: Generar un key seguro
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEBUG = True
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '*'] # TODO: dejar solo la URL donde va a estar disponible
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '*']  # TODO: dejar solo la URL donde va a estar disponible
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -21,11 +21,13 @@ INSTALLED_APPS = [
 
     'graphene_django',
     'django_filters',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -82,3 +84,11 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ORIGIN_WHITELIST = (
+    'http://127.0.0.1',
+    'http://localhost',
+)
