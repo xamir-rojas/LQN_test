@@ -1,3 +1,6 @@
+""" Schema
+Describes all kinds of information and information types
+"""
 import graphene
 from django.db.models import Q
 from graphene_django.filter import DjangoFilterConnectionField

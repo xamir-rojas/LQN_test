@@ -1,3 +1,6 @@
+"""Mutations
+Modify server-side data
+"""
 import graphene
 from graphql_relay import from_global_id
 
