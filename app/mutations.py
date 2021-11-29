@@ -2,10 +2,11 @@
 Modify server-side data
 """
 import graphene
+from graphene.types.inputobjecttype import InputObjectType
 from graphql_relay import from_global_id
 
-from .models import Planet, People
-from .types import PlanetType, PeopleType
+from .models import Planet, People, Film
+from .types import PlanetType, PeopleType, FilmType
 from .utils import generic_model_mutation_process
 
 
@@ -43,6 +44,10 @@ class CreatePlanetMutation(graphene.relay.ClientIDMutation):
         return CreatePlanetMutation(planet=planet)
 
 
+class FilmInput(InputObjectType):
+    id = graphene.ID(required=True)
+
+
 class CreatePeopleMutation(graphene.relay.ClientIDMutation):
     class Input:
         name = graphene.String(required=True)
@@ -54,16 +59,29 @@ class CreatePeopleMutation(graphene.relay.ClientIDMutation):
         birth_year = graphene.String(required=False)
         gender = graphene.String(required=False)
         home_world = graphene.ID(required=True)
+        films = graphene.List(FilmInput, required=False)
 
     people = graphene.Field(PeopleType)
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
+        # Film relation
+        films_list = input.get('films', [])
+        if films_list:
+            del input['films']
+        # Character Creation
         raw_home_world_id = input.get('home_world')
         home_world_id = from_global_id(raw_home_world_id)[1]
         input['home_world'] = Planet.objects.get(id=home_world_id)
         people = People(**input)
         people.save()
+        # Film character creation
+        for film in films_list:
+            film_id = from_global_id(film.id)[1]
+            film_object = Film.objects.get(id=film_id)
+            film_object.save()
+            film_object.characters.add(people)
+            film_object.save()
         return CreatePeopleMutation(people=people)
 
 
@@ -85,7 +103,7 @@ class UpdatePeopleMutation(graphene.relay.ClientIDMutation):
     def mutate_and_get_payload(cls, root, info, **input):
         # Gets id from input or leaves
         raw_id = input.get('id')
-        raw_home_world_id = input.get('home_world',None)
+        raw_home_world_id = input.get('home_world', None)
         # If there is a home world to update get the object
         if raw_home_world_id:
             home_world_id = from_global_id(raw_home_world_id)[1]
