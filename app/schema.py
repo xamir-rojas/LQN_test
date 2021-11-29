@@ -8,7 +8,7 @@ from graphene_django.types import DjangoObjectType
 from graphql_relay.node.node import from_global_id
 
 from .models import Planet, People, Film, Director, Producer
-from .mutations import AddPlanetMutation
+from .mutations import CreatePeopleMutation, CreatePlanetMutation, UpdatePeopleMutation
 from .types import PlanetType, PeopleType, FilmType, DirectorType, ProducerType
 
 
@@ -30,4 +30,8 @@ class Query(graphene.ObjectType):
 
 
 class Mutation(graphene.ObjectType):
-    add_planet_mutation = AddPlanetMutation.Field()
+    # Planet Mutations
+    create_planet_mutation = CreatePlanetMutation.Field()
+    # People Mutations
+    create_people_mutation = CreatePeopleMutation.Field()
+    update_people_mutation = UpdatePeopleMutation.Field()
