@@ -30,4 +30,4 @@ class Query(graphene.ObjectType):
 
 
 class Mutation(graphene.ObjectType):
-    add_planet_mutation = CreatePlanetMutation.Field()
+    create_planet_mutation = CreatePlanetMutation.Field()
