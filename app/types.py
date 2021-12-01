@@ -1,5 +1,5 @@
 """ Types
-Reprezsent a kind of object and it's fields that the user can fetch from the service.
+Represent a kind of object and it's fields that the user can fetch from the service.
 """
 
 import graphene
