@@ -49,7 +49,7 @@ class FirstTestCase(GraphQLTestCase):
             }
         ''', variables={
                 'people': {
-                    'name': "new player",
+                    'name': "new character",
                     'height': 1800,
                     'homeWorld': "UGxhbmV0VHlwZTox",
                     'films': [
@@ -65,7 +65,7 @@ class FirstTestCase(GraphQLTestCase):
             "data": {
                 "createPeopleMutation": {
                     "people": {
-                        "name": "new player",
+                        "name": "new character",
                         "height": "1800",
                         "homeWorld": {
                             "id": "UGxhbmV0VHlwZTox",
@@ -75,3 +75,43 @@ class FirstTestCase(GraphQLTestCase):
             }
         }
         self.assertEqual(expected_response, content)
+
+    def test_update_people(self):
+      response = self.query(
+         '''
+            mutation($people:UpdatePeopleMutationInput!){
+              updatePeopleMutation(input:$people){
+                people{
+                  name,
+                  height,
+                  homeWorld{
+                    id,
+                  }
+                }
+              }
+            }
+        ''', variables={
+                'people': {
+                    "id": "UGVvcGxlVHlwZTox",
+                    'name': "character",
+                    'height': 1800,
+                    'homeWorld': "UGxhbmV0VHlwZTox",
+            }
+        })
+      self.assertResponseNoErrors(response)
+      # converts json response to python object
+      content = json.loads(response.content)
+      expected_response = {
+            "data": {
+                "updatePeopleMutation": {
+                    "people": {
+                        "name": "character",
+                        "height": "1800",
+                        "homeWorld": {
+                            "id": "UGxhbmV0VHlwZTox",
+                        }
+                    }
+                }
+            }
+        }
+      self.assertEqual(expected_response, content)
