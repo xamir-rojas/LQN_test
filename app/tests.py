@@ -77,8 +77,8 @@ class FirstTestCase(GraphQLTestCase):
         self.assertEqual(expected_response, content)
 
     def test_update_people(self):
-      response = self.query(
-         '''
+        response = self.query(
+            '''
             mutation($people:UpdatePeopleMutationInput!){
               updatePeopleMutation(input:$people){
                 people{
@@ -96,12 +96,12 @@ class FirstTestCase(GraphQLTestCase):
                     'name': "character",
                     'height': 1800,
                     'homeWorld': "UGxhbmV0VHlwZTox",
-            }
-        })
-      self.assertResponseNoErrors(response)
-      # converts json response to python object
-      content = json.loads(response.content)
-      expected_response = {
+                }
+            })
+        self.assertResponseNoErrors(response)
+        # converts json response to python object
+        content = json.loads(response.content)
+        expected_response = {
             "data": {
                 "updatePeopleMutation": {
                     "people": {
@@ -114,4 +114,37 @@ class FirstTestCase(GraphQLTestCase):
                 }
             }
         }
-      self.assertEqual(expected_response, content)
+        self.assertEqual(expected_response, content)
+
+    def test_create_planet(self):
+        response = self.query(
+            '''
+            mutation($planet:CreatePlanetMutationInput!){
+              createPlanetMutation(input:$planet){
+                planet{
+                  name,
+                  population
+                }
+              }
+            }
+        ''', variables={
+                "planet": {
+                    "name": "planet",
+                    "population": "300"
+                }
+            }
+        )
+        self.assertResponseNoErrors(response)
+        # converts json response to python object
+        content = json.loads(response.content)
+        expected_response = {
+            "data": {
+                "createPlanetMutation": {
+                    "planet": {
+                        "name": "planet",
+                        "population": "300"
+                    }
+                }
+            }
+        }
+        self.assertEqual(expected_response, content)
